@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import ReactDOM from "react-dom/client";
 import {
   Home, MessageSquare, Map, FolderKanban, FileText, Plug, Zap,
   BarChart3, Users, Settings, Search, Bell, ChevronDown,
@@ -895,7 +896,16 @@ function Dashboard({ onSignOut }) {
 
 /* ---------------- root ---------------- */
 
-export default function UltronAIApp() {
-  const [view, setView] = useState("landing");
-  return view === "landing" ? <LandingPage onEnter={() => setView("app")} /> : <Dashboard onSignOut={() => setView("landing")} />;
+function App() {
+  const [page, setPage] = useState("landing");
+  const [connected, setConnected] = useState(DEFAULT_CONNECTED);
+  const [bgWidget, setBgWidget] = useState("calendar");
+
+  if (page === "landing") {
+    return <LandingPage onEnter={() => setPage("dashboard")} />;
+  }
+
+  return <Dashboard page={page} setPage={setPage} connected={connected} setConnected={setConnected} bgWidget={bgWidget} setBgWidget={setBgWidget} />;
 }
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
